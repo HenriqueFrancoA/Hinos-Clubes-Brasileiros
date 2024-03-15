@@ -1,0 +1,44 @@
+name: hinos_clubes_brasileiros
+description: "A new Flutter project."
+
+publish_to: 'none' 
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.0.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  get: ^4.6.6
+  sizer: ^2.0.15
+  intl: ^0.18.1
+  google_fonts: ^4.0.0
+  shared_preferences: ^2.2.2
+  just_audio: ^0.9.36
+  internet_connection_checker: ^1.0.0+1
+  cupertino_icons: ^1.0.2
+  font_awesome_flutter: ^10.7.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+  - assets/images/
+  - assets/images/serie-a/
+  - assets/images/serie-b/
+  - assets/images/serie-c/
+  - assets/images/serie-d/
+  - assets/sounds/
+  - assets/sounds/serie-a/
+  - assets/sounds/serie-b/
+  - assets/sounds/serie-c/
+  - assets/sounds/serie-d/
