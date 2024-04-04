@@ -1,4 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -8,15 +10,11 @@ import 'package:hinos_clubes_brasileiros/models/time.dart';
 class CardTimeComponent extends StatelessWidget {
   Time time;
   VoidCallback onPressed;
-  final bool isPlaying;
-  final double progress;
 
   CardTimeComponent({
     Key? key,
     required this.time,
     required this.onPressed,
-    required this.isPlaying,
-    required this.progress,
   }) : super(key: key);
 
   @override
@@ -33,8 +31,8 @@ class CardTimeComponent extends StatelessWidget {
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 image: DecorationImage(
-                  image: AssetImage(
-                    time.pathEscudo,
+                  image: FileImage(
+                    File(time.pathEscudo),
                   ),
                   fit: BoxFit.cover,
                 ),

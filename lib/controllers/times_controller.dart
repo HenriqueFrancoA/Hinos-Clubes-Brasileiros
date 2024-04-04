@@ -1,9 +1,15 @@
+import 'dart:io';
+
 import 'package:get/get.dart';
 import 'package:hinos_clubes_brasileiros/models/time.dart';
+import 'package:path_provider/path_provider.dart';
 
 class TimesController extends GetxController {
   RxList<Time> serieSelecionada = RxList();
   RxList<Time> timeSelecionado = RxList();
+
+  Directory? directory;
+  String? imagePath;
 
   List<String> timesSerieA = [
     "Athletico",
@@ -141,16 +147,20 @@ class TimesController extends GetxController {
     "Villa Nova MG",
   ];
 
-  carregarTimes(int index) {
+  carregarTimes(int index) async {
     serieSelecionada.clear();
     RxList<Time> listTimes = RxList();
     int x = 0;
+
+    directory = await getApplicationDocumentsDirectory();
+    imagePath = "${directory!.path}/assets";
+
     if (index == 0) {
       while (x < 20) {
         Time time = Time(
           nome: timesSerieA[x],
-          pathEscudo: "assets/images/serie-a/${x + 1}.png",
-          pathHino: "assets/sounds/serie-a/${x + 1}.mp3",
+          pathEscudo: "$imagePath/serie-a/${x + 1}.png",
+          pathHino: "$imagePath/hinos/serie-a/${x + 1}.mp3",
         );
         listTimes.add(time);
         x++;
@@ -159,8 +169,8 @@ class TimesController extends GetxController {
       while (x < 20) {
         Time time = Time(
           nome: timesSerieB[x],
-          pathEscudo: "assets/images/serie-b/${x + 1}.png",
-          pathHino: "assets/sounds/serie-b/${x + 1}.mp3",
+          pathEscudo: "$imagePath/serie-b/${x + 1}.png",
+          pathHino: "$imagePath/hinos/serie-b/${x + 1}.mp3",
         );
         listTimes.add(time);
         x++;
@@ -169,8 +179,8 @@ class TimesController extends GetxController {
       while (x < 20) {
         Time time = Time(
           nome: timesSerieC[x],
-          pathEscudo: "assets/images/serie-c/${x + 1}.png",
-          pathHino: "assets/sounds/serie-c/${x + 1}.mp3",
+          pathEscudo: "$imagePath/serie-c/${x + 1}.png",
+          pathHino: "$imagePath/hinos/serie-c/${x + 1}.mp3",
         );
         listTimes.add(time);
         x++;
@@ -179,8 +189,8 @@ class TimesController extends GetxController {
       while (x < 64) {
         Time time = Time(
           nome: timesSerieD[x],
-          pathEscudo: "assets/images/serie-d/${x + 1}.png",
-          pathHino: "assets/sounds/serie-d/${x + 1}.mp3",
+          pathEscudo: "$imagePath/serie-d/${x + 1}.png",
+          pathHino: "$imagePath/hinos/serie-d/${x + 1}.mp3",
         );
         listTimes.add(time);
         x++;

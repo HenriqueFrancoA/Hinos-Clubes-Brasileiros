@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hinos_clubes_brasileiros/components/botton_navigator_component.dart';
 import 'package:hinos_clubes_brasileiros/components/cards_time_components.dart';
 import 'package:hinos_clubes_brasileiros/controllers/times_controller.dart';
+import 'package:hinos_clubes_brasileiros/models/banner_anuncio.dart';
 import 'package:hinos_clubes_brasileiros/models/time.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:sizer/sizer.dart';
@@ -27,9 +32,53 @@ class _TimesScreenState extends State<TimesScreen> {
 
   RxDouble progresso = 0.0.obs;
 
+  BannerAd? bannerAd;
+  InterstitialAd? interstitialAd;
+  bool isLoaded = false;
+
+  int clickCounter = 0;
+
+  void loadAd() {
+    bannerAd = BannerAd(
+      adUnitId:
+          kReleaseMode ? BannerAnuncio.idBanner : BannerAnuncio.testeIdBanner,
+      request: const AdRequest(),
+      size: AdSize.fluid,
+      listener: BannerAdListener(
+        onAdLoaded: (ad) {
+          debugPrint('$ad loaded.');
+          setState(() {
+            isLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('BannerAd failed to load: $err');
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
+
+  void carregarAnuncioEsticado() {
+    InterstitialAd.load(
+        adUnitId: BannerAnuncio.testeIdEsticado,
+        request: const AdRequest(),
+        adLoadCallback: InterstitialAdLoadCallback(
+          onAdLoaded: (ad) {
+            debugPrint('$ad loaded.');
+            interstitialAd = ad;
+          },
+          onAdFailedToLoad: (LoadAdError error) {
+            debugPrint('InterstitialAd failed to load: $error');
+          },
+        ));
+  }
+
   @override
   void initState() {
     super.initState();
+    loadAd();
+    carregarAnuncioEsticado();
     timesController.carregarTimes(0);
     hinoPlayer = AudioPlayer();
 
@@ -68,10 +117,17 @@ class _TimesScreenState extends State<TimesScreen> {
         tocandoHino.value = true;
         return;
       }
+    } else {
+      clickCounter++;
+      if (clickCounter % 3 == 0) {
+        carregarAnuncioEsticado();
+        interstitialAd!.show();
+      }
     }
 
     hinoPlayer.stop();
-    await hinoPlayer.setAsset(audioPath);
+    //  hinoPlayer.setAsset(audioPath);
+    await hinoPlayer.setFilePath(audioPath);
     hinoPlayer.play();
     tocandoHino.value = true;
     ultimoHino = audioPath;
@@ -102,7 +158,18 @@ class _TimesScreenState extends State<TimesScreen> {
                   padding: const EdgeInsets.all(20),
                   child: Column(
                     children: [
-                      SizedBox(height: 5.h),
+                      bannerAd != null
+                          ? Align(
+                              alignment: Alignment.bottomCenter,
+                              child: SafeArea(
+                                child: SizedBox(
+                                  width: 100.w,
+                                  height: 5.h,
+                                  child: AdWidget(ad: bannerAd!),
+                                ),
+                              ),
+                            )
+                          : SizedBox(height: 5.h),
                       Text(
                         "Hinos do Brasil",
                         style: Theme.of(context).textTheme.titleMedium,
@@ -131,8 +198,6 @@ class _TimesScreenState extends State<TimesScreen> {
                                   timesController.selecionarTime(
                                       timesController.serieSelecionada[index]);
                                 },
-                                isPlaying: false,
-                                progress: 0,
                                 time: timesController.serieSelecionada[index],
                               );
                             },
@@ -154,10 +219,19 @@ class _TimesScreenState extends State<TimesScreen> {
                           padding: const EdgeInsets.all(5),
                           child: Row(
                             children: [
-                              Image.asset(
-                                timesController
-                                    .timeSelecionado.first.pathEscudo,
-                                fit: BoxFit.cover,
+                              Container(
+                                width: 50,
+                                height: 50,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                    image: FileImage(
+                                      File(timesController
+                                          .timeSelecionado.first.pathEscudo),
+                                    ),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                               SizedBox(width: 5.w),
                               SizedBox(
