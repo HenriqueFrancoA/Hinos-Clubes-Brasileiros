@@ -44,5 +44,3 @@ app.*.map.json
 
 **/android/key.properties
 **/assets/keystore
-**/lib/models/banner_anuncio.dart
-**/lib/models/link_import.dart
