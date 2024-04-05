@@ -5,7 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hinos_clubes_brasileiros/components/notification_snack_bar.dart';
-import 'package:hinos_clubes_brasileiros/models/link_import.dart';
+import 'package:hinos_clubes_brasileiros/models/link.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:archive/archive.dart';
