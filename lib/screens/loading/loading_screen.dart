@@ -5,6 +5,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hinos_clubes_brasileiros/components/notification_snack_bar.dart';
+import 'package:hinos_clubes_brasileiros/models/link_import.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:http/http.dart' as http;
 import 'package:archive/archive.dart';
@@ -34,8 +35,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
         downloadProgress = 0.0;
       });
 
-      String url =
-          'https://www.dropbox.com/scl/fi/983vocwkabj6uoeel2brd/assets.zip?rlkey=8by4k7k5qpl7x5dolar4acjkl&dl=0&dl=1';
+      String url = Link.import;
 
       Directory tempDir = await getApplicationDocumentsDirectory();
       String tempPath = tempDir.path;
